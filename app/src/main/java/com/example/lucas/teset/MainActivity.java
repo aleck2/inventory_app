@@ -126,9 +126,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // TODO replace thread.sleep, non-UI thread can't change UI thread, use async task
         InternetHelper helper = new InternetHelper(myItems, adapter, mHandler);
-
         Thread t = new Thread(helper);
         t.start();
 
