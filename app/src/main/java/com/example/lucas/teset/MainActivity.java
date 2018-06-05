@@ -107,9 +107,9 @@ public class MainActivity extends AppCompatActivity {
                         // TODO check return code of PostContent before removing from data
                         myItems.remove(myItem);
                         adapter.notifyDataSetChanged();
-                        PostContent post = new PostContent(myItem);
-                        Thread t2 = new Thread(post);
-                        t2.start();
+//                        PostContent post = new PostContent(myItem);
+//                        Thread t2 = new Thread(post);
+//                        t2.start();
 
                     }
                 }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

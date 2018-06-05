@@ -40,7 +40,9 @@ public class InternetHelper implements Runnable{
         HttpURLConnection urlConnection = null;
 
         try {
-            url = new URL("http://10.0.0.20:5000/getUndelivered");
+//            url = new URL("http://10.0.0.20:5000/getUndelivered");
+            url = new URL("http://10.0.0.20:5000/demo");
+
 
             urlConnection = (HttpURLConnection) url.openConnection();
             BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"), 8);
