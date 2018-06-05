@@ -1,6 +1,8 @@
 package com.example.lucas.teset;
 
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -22,11 +24,15 @@ import java.util.ArrayList;
 public class InternetHelper implements Runnable{
     private ArrayList<Item> myItems = null;
     private ItemAdapter adapter = null;
+    private Handler mHandler;
 
-    public InternetHelper(ArrayList<Item> _myItems, ItemAdapter _adapter) {
+    public InternetHelper(ArrayList<Item> _myItems, ItemAdapter _adapter, Handler _mHandler) {
         myItems = _myItems;
         adapter = _adapter;
+        mHandler = _mHandler;
     }
+
+
 
     public void run() {
         String result = null;
@@ -35,6 +41,7 @@ public class InternetHelper implements Runnable{
 
         try {
             url = new URL("http://10.0.0.20:5000/getUndelivered");
+
             urlConnection = (HttpURLConnection) url.openConnection();
             BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"), 8);
             StringBuilder sb = new StringBuilder();
@@ -45,12 +52,12 @@ public class InternetHelper implements Runnable{
                 sb.append(line + "\n");
             }
             result = sb.toString();
-            Log.i("result", result);
+            Log.i("InternetHelper", result);
 
 
         } catch (Exception e) {
-            Log.i("main", "read http error");
-            Log.i("main", e.toString());
+            Log.i("InternetHelper", "read http error");
+            Log.i("InternetHelper", e.toString());
         } finally {
             urlConnection.disconnect();
         }
@@ -84,9 +91,14 @@ public class InternetHelper implements Runnable{
                 }
             }
             Log.i("InternetHelper", "helper is done");
-            adapter.notifyDataSetChanged(); // can't update UI thread
+            Message message = new Message();
+            message.arg1 = 1;
+            mHandler.sendMessage(message);
 
         } catch (Exception e) {
+            Message message = new Message();
+            message.arg1 = 0;
+            mHandler.sendMessage(message);
         }
 
 

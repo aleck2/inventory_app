@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AlertDialog;
@@ -52,6 +54,14 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Item> myItems = new ArrayList<Item>();
     private ItemAdapter adapter = null;
 
+    private  Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            int success = msg.arg1;
+            if (success == 1) {
+                adapter.notifyDataSetChanged();
+            }
+        }
+    }; // Handler is associated with UI Thread
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,13 +127,11 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // TODO replace thread.sleep, non-UI thread can't change UI thread, use async task
-        InternetHelper helper = new InternetHelper(myItems, adapter);
+        InternetHelper helper = new InternetHelper(myItems, adapter, mHandler);
+
         Thread t = new Thread(helper);
         t.start();
-        try {
-            Thread.sleep(500);
-        } catch (Exception e) { }
-        adapter.notifyDataSetChanged();
+
 
 
     }
